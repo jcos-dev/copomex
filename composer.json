@@ -1,0 +1,20 @@
+{
+    "name": "jcos/copomex",
+    "description": "Library for use Copomex API",
+    "type": "library",
+    "require-dev": {
+        "symfony/var-dumper": "^7.0",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Src\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "jcos-dev",
+            "email": "ing.jcolvera_s@outlook.com"
+        }
+    ]
+}
