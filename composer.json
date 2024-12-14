@@ -2,6 +2,8 @@
     "name": "jcos/copomex",
     "description": "Library for use Copomex API",
     "type": "library",
+    "keywords": ["copomex","copomex api","api copomex"],
+    "license": "MIT",
     "minimum-stability": "dev",
     "require": {
         "php": ">=8.2.19",
@@ -27,8 +29,9 @@
     },
     "authors": [
         {
-            "name": "jcos-dev",
-            "email": "ing.jcolvera_s@outlook.com"
+            "name": "Cristian Olvera",
+            "email": "ing.jcolvera_s@outlook.com",
+            "role": "Developer"
         }
     ],
     "config": {
