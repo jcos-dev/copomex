@@ -2,22 +2,37 @@
 
 namespace Src;
 
+use Monolog\Level;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 class Copomex
 {
     private const URL = 'https://api.copomex.com/query/';
-    private string $method;
-    private string $search;
-    private array $variable;
-    private string $token;
-    private string $endpoint;
-    private array|null $response;
-    private array|null $error;
+    private string $method = '';
+    private string $search = '';
+    private array $variable = [];
+    private string $token = '';
+    private string $endpoint = '';
+    private array|null $response = null;
+    private array $error = [];
+    private Logger $log;
 
-    public function __construct($method, $token)
+    public function __construct(string $token)
     {
+        $this->log = new Logger("copomex");
+        $this->log->pushHandler(
+            new StreamHandler(
+                __DIR__ . "/../copomex.log",
+                Level::Debug
+            )
+        );
         $this->token = $token;
+    }
+
+    public function setMethod($method)
+    {
         $this->method = $method;
-        $this->error = null;
     }
 
     public function request(string $search = '', array $variable = []): void
@@ -30,37 +45,47 @@ class Copomex
             $this->endpoint = $this->buildUrl();
             $response = $this->sentRequest($this->endpoint);
 
-            if(is_null($response)){
-                $this->response = $response;
-                throw new \Exception("Search not identified");
+            if (is_null($response)) {
+                $this->log->warning(
+                    "Se obtuvo una respuesta nula del API",
+                    [date('Y-m-d H:i:s')]
+                );
+                throw new \Exception("No se identifica la búsqueda");
             }
 
             $this->response = $response;
-
         } catch (\Exception $e) {
             $this->error = [
-                'error'=> true,
-                'error_message'=> $e->getMessage()
+                'error' => true,
+                'error_message' => $e->getMessage()
             ];
         }
     }
 
-    private function buildUrl()
+    private function buildUrl(): string
     {
 
-        $token = 'token=' . $this->token;
-        $prefix = self::URL . $this->method . '/' . $this->search . '?';
+        if ($this->token == '') {
+            $this->log->warning(
+                "Se debe proporcionar un token",
+                [date('Y-m-d H:i:s')]
+            );
+            throw new \Exception("Se requiere el token");
+        }
+
+        $token = "token={$this->token}";
+        $prefix = self::URL . "{$this->method}/{$this->search}?";
         $endpoint =  $prefix  .  $token;
 
         if (!empty($this->variable)) {
             $variable = http_build_query($this->variable);
-            $endpoint = $prefix .  $variable . '&' .  $token;
+            $endpoint = "{$prefix}{$variable}&{$token}";
         }
 
         return $endpoint;
     }
 
-    private function sentRequest($endpoint)
+    private function sentRequest($endpoint): array|null
     {
 
         $url = str_replace(" ", "%20", $endpoint);
@@ -72,25 +97,26 @@ class Copomex
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            $error = curl_error($ch);
-            throw new \Exception($error);
+            $this->log->error(
+                curl_error($ch),
+                [date('Y-m-d H:i:s')]
+            );
+            throw new \Exception('No se pudo realizar la solicitud');
         }
 
         curl_close($ch);
 
-        $result = json_decode($response, true);
-
-        return $result;
+        return json_decode($response, true);
     }
 
     public function response(): array|null
     {
+        return !empty($this->error) ? $this->error :  $this->response;
+    }
 
-        if (!empty($this->error)) {
-            return $this->error;
-        }
-        
-        return $this->response;
+    public function getToken(): string
+    {
+        return $this->token;
     }
 
     public function error(): array

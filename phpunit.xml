@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php" colors="true">
+    <testsuites>
+        <testsuite name="tests">
+            <directory suffix=".php" phpVersion="8.2.19" phpVersionOperator=">=">tests</directory>
+        </testsuite>
+        <!-- <testsuite name="other">
+            <directory suffix=".php">other</directory>
+            <file>library/XXX/FormTest.php</file>
+        </testsuite> -->
+    </testsuites>
+    <logging>
+        <testdoxHtml outputFile="reports/testdox.html" />
+        <testdoxText outputFile="reports/testdox.txt" />
+    </logging>
+</phpunit>
