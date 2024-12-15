@@ -21,12 +21,7 @@ class Copomex
     public function __construct(string $token)
     {
         $this->log = new Logger("copomex");
-        $this->log->pushHandler(
-            new StreamHandler(
-                __DIR__ . "/../copomex.log",
-                Level::Debug
-            )
-        );
+        $this->log->pushHandler(new StreamHandler(getcwd() . "/copomex.log",Level::Debug));
         $this->token = $token;
     }
 
@@ -47,7 +42,7 @@ class Copomex
 
             if (is_null($response)) {
                 $this->log->warning(
-                    "Se obtuvo una respuesta nula del API",
+                    "Se obtuvo una respuesta nula del API de {$this->endpoint}",
                     [date('Y-m-d H:i:s')]
                 );
                 throw new \Exception("No se identifica la búsqueda");
@@ -67,7 +62,7 @@ class Copomex
 
         if ($this->token == '') {
             $this->log->warning(
-                "Se debe proporcionar un token",
+                "Se debe proporcionar un token en archivo .env",
                 [date('Y-m-d H:i:s')]
             );
             throw new \Exception("Se requiere el token");

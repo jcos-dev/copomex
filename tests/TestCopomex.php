@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test;
 
+date_default_timezone_set('Etc/GMT+6');
+
 use Src\Copomex;
 use Dotenv\Dotenv;
 
@@ -17,9 +19,14 @@ class TestCopomex extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-        $dotenv->load();
-        $this->copomex = new Copomex($_ENV['COPOMEX_TOKEN']);
+
+        try {
+            $dotenv = Dotenv::createImmutable(getcwd());
+            $dotenv->load();
+            $this->copomex = new Copomex($_ENV['COPOMEX_TOKEN']);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
     public function testTokenProporcionado()
