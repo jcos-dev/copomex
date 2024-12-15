@@ -5,6 +5,7 @@
     "keywords": ["copomex","copomex api","api copomex"],
     "license": "MIT",
     "minimum-stability": "stable",
+    "version": "1.0.0",
     "require": {
         "php": ">=8.2.19",
         "monolog/monolog": "^3.0@dev"
