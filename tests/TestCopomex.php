@@ -99,35 +99,35 @@ class TestCopomex extends TestCase
 
     public function testBusquedaCPAvanzada()
     {
-        $array = [
+        $query = [
             'limit' => '10'
         ];
 
         $this->copomex->setMethod('search_cp_advanced');
-        $this->copomex->request('Ciudad de México', $array);
+        $this->copomex->request('Ciudad de México', $query);
         $this->assertNotTrue($this->copomex->response()['error']);
     }
 
     public function testObtenerCPAvanzado()
     {
-        $array = [
+        $query = [
             'limit' => '10'
         ];
 
         $this->copomex->setMethod('get_cp_advanced');
-        $this->copomex->request('Ciudad de México', $array);
+        $this->copomex->request('Ciudad de México', $query);
         $this->assertNotTrue($this->copomex->response()['error']);
     }
 
     public function testObtenerColoniaPorEstadoYMunicipio()
     {
-        $array = [
+        $query = [
             'estado' => 'Ciudad de México',
             'municipio' => 'Iztapalapa'
         ];
 
         $this->copomex->setMethod('get_colonia_por_estado_municipio');
-        $this->copomex->request('', $array);
+        $this->copomex->request('', $query);
         $this->assertNotTrue($this->copomex->response()['error']);
     }
 
@@ -141,27 +141,27 @@ class TestCopomex extends TestCase
 
     public function testObtenerInformacionPorDireccionYCP()
     {
-        $array = [
+        $query = [
             'type' => 'simplified',
             'calle' => 'reforma',
             'numero' => '222'
         ];
 
         $this->copomex->setMethod('info_cp_geocoding');
-        $this->copomex->request('09810', $array);
+        $this->copomex->request('09810', $query);
         $this->assertNotTrue($this->copomex->response()['error']);
     }
 
     public function testObtenerCPPorGeolocalizacion()
     {
 
-        $array = [
+        $query = [
             'lat' => '19.42881',
             'lng' => '-99.16225'
         ];
 
         $this->copomex->setMethod('info_cp_geocoding_reverse');
-        $this->copomex->request('', $array);
+        $this->copomex->request('', $query);
         $this->assertNotTrue($this->copomex->response()['error']);
     }
 
@@ -188,50 +188,50 @@ class TestCopomex extends TestCase
 
     public function testObtenerLocalidadYClavePorEstadoYMunicipio()
     {
-        $array = [
+        $query = [
             'estado' => 'Aguascalientes',
             'municipio' => 'Aguascalientes'
         ];
 
         $this->copomex->setMethod('get_localidad_por_estado_municipio');
-        $this->copomex->request('', $array);
+        $this->copomex->request('', $query);
         $this->assertNotTrue($this->copomex->response()['error']);
     }
 
     public function testObtenerLocalidadYClavePorClaveEstadoYClaveMunicipio()
     {
-        $array = [
+        $query = [
             'clave_estado' => '01',
             'clave_municipio' => '001'
         ];
 
         $this->copomex->setMethod('get_localidad_por_clave_estado_municipio');
-        $this->copomex->request('', $array);
+        $this->copomex->request('', $query);
         $this->assertNotTrue($this->copomex->response()['error']);
     }
 
     public function testObtenerInformacionDeLocalidad()
     {
-        $array = [
+        $query = [
             'clave_estado' => '01',
             'clave_municipio' => '001',
             'clave_localidad' => '0001'
         ];
 
         $this->copomex->setMethod('info_localidad');
-        $this->copomex->request('', $array);
+        $this->copomex->request('', $query);
         $this->assertNotTrue($this->copomex->response()['error']);
     }
 
     public function testObtenerVialidadPorMunicipio()
     {
-        $array = [
+        $query = [
             'clave_estado' => '01',
             'clave_municipio' => '001'
         ];
 
         $this->copomex->setMethod('get_vialidad');
-        $this->copomex->request('', $array);
+        $this->copomex->request('', $query);
         $this->assertNotTrue($this->copomex->response()['error']);
     }
 

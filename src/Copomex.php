@@ -11,7 +11,7 @@ class Copomex
     private const URL = 'https://api.copomex.com/query/';
     private string $method = '';
     private string $search = '';
-    private array $variable = [];
+    private array $query = [];
     private string $token = '';
     private string $endpoint = '';
     private array|null $response = null;
@@ -30,13 +30,13 @@ class Copomex
         $this->method = $method;
     }
 
-    public function request(string $search = '', array $variable = []): void
+    public function request(string $search = '', array $query = []): void
     {
 
         try {
 
             $this->search = $search;
-            $this->variable = $variable;
+            $this->query = $query;
             $this->endpoint = $this->buildUrl();
             $response = $this->sentRequest($this->endpoint);
 
@@ -72,9 +72,9 @@ class Copomex
         $prefix = self::URL . "{$this->method}/{$this->search}?";
         $endpoint =  $prefix  .  $token;
 
-        if (!empty($this->variable)) {
-            $variable = http_build_query($this->variable);
-            $endpoint = "{$prefix}{$variable}&{$token}";
+        if (!empty($this->query)) {
+            $query = http_build_query($this->query);
+            $endpoint = "{$prefix}{$query}&{$token}";
         }
 
         return $endpoint;
